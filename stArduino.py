@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+# import numpy as np
+# import matplotlib.pyplot as plt
 import altair as alt
 import datetime
 import serial
@@ -41,7 +41,7 @@ def my_to_datetime(col):
 def importData(fname):
     data1 = pd.read_csv(
         fname,
-        sep="\s+",
+        sep=r"\s+",
         names=columns,
         converters={"Time": toTime},
         # parse_dates=[['Date','Time']],
@@ -51,7 +51,7 @@ def importData(fname):
         skiprows=lambda x: x % 2,
     )
     data2 = pd.read_csv(
-        fname, sep="\s+", names=["Вес", "g"], skiprows=lambda x: not x % 2
+        fname, sep=r"\s+", names=["Вес", "g"], skiprows=lambda x: not x % 2
     )
     data = pd.concat([data1, data2], axis=1)
     data["DateTime"] = data["Date"] + data["Time"]
@@ -103,6 +103,7 @@ with st.sidebar.expander("Порты", expanded=True):
         index=ckey,
     )
 
+
 def runing_callback():
     st.sidebar.write(st.session_state["is_running"])
     if st.session_state["is_running"]:
@@ -116,19 +117,17 @@ def runing_callback():
         st.sidebar.success("Запись остановлена!")
 
 
-run = st.sidebar.toggle("Запись", 
-                        key="is_running",
-                        on_change=runing_callback)
+run = st.sidebar.toggle("Запись", key="is_running", on_change=runing_callback)
 
 
 record_delay = st.sidebar.number_input(
-    "Задержка между измерениями, с", 
+    "Задержка между измерениями, с",
     value=st.session_state["record_delay"],
     min_value=1,
     max_value=600,
     step=1,
-    key='record_delay',
-    )
+    key="record_delay",
+)
 
 with st.sidebar.expander("Образец", expanded=True):
     D = st.number_input("Диаметр", value=D)
@@ -151,7 +150,11 @@ with st.expander("Данные в таблице", expanded=False):
         showdata = data[columns_vis].iloc[::-1]
     else:
         showdata = data[columns_vis]
-    st.dataframe(data=showdata, use_container_width=True, height=300, hide_index=True)
+    st.dataframe(data=showdata,
+                 use_container_width=True,
+                 height=300,
+                 hide_index=True
+                 )
 
 with st.expander("Графики", expanded=True):
     cWeight = (

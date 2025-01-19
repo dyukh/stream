@@ -4,6 +4,7 @@ import time
 import queue
 import logging
 
+
 class SensorModule:
     def __init__(self):
         self.serial_port = None
@@ -31,12 +32,12 @@ class SensorModule:
         while self.is_recording:
             try:
                 if self.serial_port.in_waiting > 0:
-                    # data = self.serial_port.readline().decode('utf-8').strip()
+                    # data=self.serial_port.readline().decode('utf-8').strip()
                     data = self.serial_port.readline().strip()
                     filtered_data = self.filter_data(data)
                     self.data_queue.put(filtered_data)
                     self.save_data(filtered_data)
-                time.sleep(self.time_sleep)  # Задержка в self.time_sleep секунд
+                time.sleep(self.time_sleep)  # Задержка в self.time_sleep сек
             except Exception as e:
                 logging.error(f"Error reading data: {e}")
                 time.sleep(1)
