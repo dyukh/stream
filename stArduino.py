@@ -8,8 +8,6 @@ import serial
 import serial.tools.list_ports
 from sensor_module import SensorModule  # модуль работы с датчиком
 
-sensor = SensorModule()
-
 columns = "Date,Time,Расход,Давление,R1,R2,R3,R4,U5,Температура".split(",")
 columns_vis = "DateTime,Расход,Давление,Вес,R1,R2,R3,R4,U5,Температура".split(",")
 columns_plot = "DateTime,Давление,Вес".split(",")
@@ -23,6 +21,10 @@ if "port" not in st.session_state:
     st.session_state["port"] = "COM1"
 # if "record_delay" not in st.session_state:
 #     st.session_state["record_delay"] = 1
+if "sensor" not in st.session_state:
+    st.session_state["sensor"] = SensorModule()
+
+sensor = st.session_state["sensor"]
 
 
 def toTime(col):

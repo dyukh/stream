@@ -14,7 +14,6 @@ class SensorModule:
         self.thread = None
         self.fname = None
         self.file = None
-        self.mk_def_fname()    
 
     def configure_port(self, port, baudrate):
         self.serial_port = serial.Serial(port, baudrate)
@@ -24,19 +23,23 @@ class SensorModule:
             self.is_recording = True
             self.thread = threading.Thread(target=self.read_data)
             self.thread.start()
+            if self.fname is None or self.file.closed():
+                self.mk_def_fname()
+                
 
     def stop_recording(self):
         self.is_recording = False
         if self.thread:
             self.thread.join()
             self.thread = None
+        self.close()
 
     def read_data(self):
         while self.is_recording:
             try:
                 if self.serial_port.in_waiting > 0:
                     # data=self.serial_port.readline().decode('utf-8').strip()
-                    data = self.serial_port.readline().strip()
+                    data = self.serial_port.readline().decode('utf-8').strip()
                     filtered_data = self.filter_data(data)
                     self.data_queue.put(filtered_data)
                     self.save_data(filtered_data)
@@ -52,9 +55,10 @@ class SensorModule:
     def save_data(self, data):
         # Реализуйте сохранение данных в базу данных или файл
         print(str(data))
-        self.file.write(str(data) + '\n')
-        self.file.flush()
-
+        if(data is not None):
+            strt = time.strftime("%c ", time.localtime())
+            self.file.write(strt + str(data) + '\n')
+            self.file.flush()
 
     def get_time_sleep(self):
         return self.time_sleep
@@ -85,8 +89,7 @@ class SensorModule:
         if self.serial_port:
             self.serial_port.close()
         if self.file:
-            self.file.close()
-            self.mk_def_fname()    
+            self.file.close()            
 
     def mk_def_fname(self):
         fname = time.strftime("%Y-%m-%d--%H-%M-%S.txt", time.localtime())
