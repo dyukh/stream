@@ -12,6 +12,9 @@ class SensorModule:
         self.is_recording = False
         self.data_queue = queue.Queue()
         self.thread = None
+        self.fname = None
+        self.file = None
+        self.mk_def_fname()    
 
     def configure_port(self, port, baudrate):
         self.serial_port = serial.Serial(port, baudrate)
@@ -48,8 +51,10 @@ class SensorModule:
 
     def save_data(self, data):
         # Реализуйте сохранение данных в базу данных или файл
-        print(data)
-        pass
+        print(str(data))
+        self.file.write(str(data) + '\n')
+        self.file.flush()
+
 
     def get_time_sleep(self):
         return self.time_sleep
@@ -62,6 +67,27 @@ class SensorModule:
             return self.data_queue.get()
         return None
 
+    def get_fname(self):
+        return self.fname
+
+    def set_fname(self, fname):
+        if self.file is not None:
+            self.file.close()
+            logging.info(f"Closing file: {self.fname}")
+        self.fname = fname
+        logging.info(f"Open file: {fname}")
+        try:
+            self.file = open(fname, "a+")
+        except OSError:
+            logging.error(f"Can not open file for writing: {fname}")
+
     def close(self):
         if self.serial_port:
             self.serial_port.close()
+        if self.file:
+            self.file.close()
+            self.mk_def_fname()    
+
+    def mk_def_fname(self):
+        fname = time.strftime("%Y-%m-%d--%H-%M-%S.txt", time.localtime())
+        self.set_fname(fname=fname)

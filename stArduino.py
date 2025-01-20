@@ -21,8 +21,8 @@ if "is_running" not in st.session_state:
     st.session_state["is_running"] = False
 if "port" not in st.session_state:
     st.session_state["port"] = "COM1"
-if "record_delay" not in st.session_state:
-    st.session_state["record_delay"] = 1
+# if "record_delay" not in st.session_state:
+#     st.session_state["record_delay"] = 1
 
 
 def toTime(col):
@@ -87,7 +87,6 @@ st.title("Эксперимент")
 # Настройка боковой панели
 st.sidebar.title("Параметры")
 
-
 clist, dlist, ckey = get_COM_list()
 
 with st.sidebar.expander("Порты", expanded=True):
@@ -103,12 +102,11 @@ with st.sidebar.expander("Порты", expanded=True):
         index=ckey,
     )
 
-
 def runing_callback():
     st.sidebar.write(st.session_state["is_running"])
     if st.session_state["is_running"]:
         # start recording
-        sensor.configure_port("COM3", 9600)
+        sensor.configure_port(ard_port, 9600)
         sensor.start_recording()
         st.sidebar.success("Запись начата!")
     else:
@@ -117,12 +115,14 @@ def runing_callback():
         st.sidebar.success("Запись остановлена!")
 
 
-run = st.sidebar.toggle("Запись", key="is_running", on_change=runing_callback)
+if ard_port:
+    run = st.sidebar.toggle(":red-background[**Запись**]", key="is_running", on_change=runing_callback)
 
+st.sidebar.success(f"файл: {sensor.get_fname()}")
 
 record_delay = st.sidebar.number_input(
     "Задержка между измерениями, с",
-    value=st.session_state["record_delay"],
+    # value=st.session_state["record_delay"],
     min_value=1,
     max_value=600,
     step=1,
