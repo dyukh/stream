@@ -24,7 +24,7 @@ class SensorModule:
             self.is_recording = True
             self.thread = threading.Thread(target=self.read_data)
             self.thread.start()
-            if self.fname is None or self.file.closed():
+            if self.fname is None or self.file.closed:
                 self.mk_def_fname()
                 
 
@@ -39,7 +39,6 @@ class SensorModule:
         while self.is_recording:
             try:
                 if self.serial_port.in_waiting > 0:
-                    # data=self.serial_port.readline().decode('utf-8').strip()
                     data = self.serial_port.readline().decode('utf-8').strip()
                     filtered_data = self.filter_data(data)
                     if filtered_data is not None:
@@ -51,19 +50,19 @@ class SensorModule:
                 time.sleep(1)
 
     def filter_data(self, data):
-        # Реализуйте фильтрацию данных
+        # Здесь должна быть фильтрацию данных
+        # Но пока я просто добавляю текущее время
+        # И предполагается что в data напечатано целое число
         if data is not None:
-            # strt = time.strftime("%c", time.localtime())
             strt = datetime.datetime.now()
             ret_data = [strt, int(data)]
             return ret_data
         return None
 
     def save_data(self, data):
-        # Реализуйте сохранение данных в базу данных или файл
+        # Может быть сохранение данных в базу данных или файл
         print(data)
         if(data is not None):
-            # strt = time.strftime("%c ", time.localtime())
             print(', '.join(map(str,data)), file=self.file)
             self.file.flush()
 
@@ -88,7 +87,7 @@ class SensorModule:
         return self.fname
 
     def set_fname(self, fname):
-        if self.file is not None:
+        if self.file is not None and not self.file.closed:
             self.file.close()
             logging.info(f"Closing file: {self.fname}")
         self.fname = fname

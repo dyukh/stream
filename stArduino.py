@@ -147,7 +147,7 @@ if st.button("Обновить данные"):
     latest_data = sensor.get_data()
     if latest_data:
         st.session_state["datalist"].extend(latest_data)
-        df = pd.DataFrame(st.session_state["datalist"][-1000:], columns = ['Время', 'Показания'])
+    df = pd.DataFrame(st.session_state["datalist"][-1000:], columns = ['Время', 'Показания'])
     plot = px.scatter(df, x='Время', y='Показания')
     st.plotly_chart(plot)
     col1, col2 = st.columns(2)
