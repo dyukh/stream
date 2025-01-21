@@ -119,6 +119,9 @@ def runing_callback():
         sensor.stop_recording()
         st.sidebar.success("Запись остановлена!")
 
+def delay_callback():
+    st.session_state["sensor"].set_time_sleep(st.session_state["record_delay"])
+
 
 if ard_port:
     run = st.sidebar.toggle(":red-background[**Запись**]", key="is_running", on_change=runing_callback)
@@ -129,9 +132,10 @@ record_delay = st.sidebar.number_input(
     "Задержка между измерениями, с",
     # value=st.session_state["record_delay"],
     min_value=1,
-    max_value=600,
+    max_value=3600,
     step=1,
     key="record_delay",
+    on_change=delay_callback,
 )
 
 with st.sidebar.expander("Образец", expanded=True):
@@ -143,7 +147,7 @@ if st.button("Обновить данные"):
     latest_data = sensor.get_data()
     if latest_data:
         st.session_state["datalist"].extend(latest_data)
-        df = pd.DataFrame(st.session_state["datalist"], columns = ['Время', 'Показания'])
+        df = pd.DataFrame(st.session_state["datalist"][-1000:], columns = ['Время', 'Показания'])
     plot = px.scatter(df, x='Время', y='Показания')
     st.plotly_chart(plot)
     col1, col2 = st.columns(2)
