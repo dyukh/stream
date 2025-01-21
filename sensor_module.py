@@ -41,8 +41,9 @@ class SensorModule:
                     # data=self.serial_port.readline().decode('utf-8').strip()
                     data = self.serial_port.readline().decode('utf-8').strip()
                     filtered_data = self.filter_data(data)
-                    self.data_queue.put(filtered_data)
-                    self.save_data(filtered_data)
+                    if filtered_data is not None:
+                        self.data_queue.put(filtered_data)
+                        self.save_data(filtered_data)
                 time.sleep(self.time_sleep)  # Задержка в self.time_sleep сек
             except Exception as e:
                 logging.error(f"Error reading data: {e}")
@@ -50,14 +51,18 @@ class SensorModule:
 
     def filter_data(self, data):
         # Реализуйте фильтрацию данных
-        return data
+        if data is not None:
+            strt = time.strftime("%c", time.localtime())
+            ret_data = [strt, int(data)]
+            return ret_data
+        return None
 
     def save_data(self, data):
         # Реализуйте сохранение данных в базу данных или файл
-        print(str(data))
+        print(data)
         if(data is not None):
-            strt = time.strftime("%c ", time.localtime())
-            self.file.write(strt + str(data) + '\n')
+            # strt = time.strftime("%c ", time.localtime())
+            print(', '.join(map(str,data)), file=self.file)
             self.file.flush()
 
     def get_time_sleep(self):

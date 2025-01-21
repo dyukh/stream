@@ -13,16 +13,16 @@ sensor.start_recording()
 
 print('Start')
 
-for i in range(10):
+for i in range(5):
     latest_data = sensor.get_data()
-    print(i, latest_data)
+    # print(i, latest_data)
     time.sleep(5)
 
 sensor.stop_recording()
 
 print('Stop')
 
-for i in range(10):
+for i in range(5):
     latest_data = sensor.get_data()
     print(i, latest_data)
     time.sleep(5)
