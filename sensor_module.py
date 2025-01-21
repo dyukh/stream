@@ -26,7 +26,6 @@ class SensorModule:
             self.thread.start()
             if self.fname is None or self.file.closed:
                 self.mk_def_fname()
-                
 
     def stop_recording(self):
         self.is_recording = False
@@ -39,7 +38,7 @@ class SensorModule:
         while self.is_recording:
             try:
                 if self.serial_port.in_waiting > 0:
-                    data = self.serial_port.readline().decode('utf-8').strip()
+                    data = self.serial_port.readline().decode("utf-8").strip()
                     filtered_data = self.filter_data(data)
                     if filtered_data is not None:
                         self.data_queue.put(filtered_data)
@@ -62,8 +61,8 @@ class SensorModule:
     def save_data(self, data):
         # Может быть сохранение данных в базу данных или файл
         print(data)
-        if(data is not None):
-            print(', '.join(map(str,data)), file=self.file)
+        if data is not None:
+            print(", ".join(map(str, data)), file=self.file)
             self.file.flush()
 
     def get_time_sleep(self):
@@ -101,7 +100,7 @@ class SensorModule:
         if self.serial_port:
             self.serial_port.close()
         if self.file:
-            self.file.close()            
+            self.file.close()
 
     def mk_def_fname(self):
         fname = time.strftime("%Y-%m-%d--%H-%M-%S.txt", time.localtime())
