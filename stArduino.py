@@ -68,7 +68,7 @@ def get_COM_list():
     dlist = []
     plist = serial.tools.list_ports.comports(include_links=False)
     for p in plist:
-        clist.append(p.name)
+        clist.append(p.device)
         dlist.append(p.description)
         # st.write(p.name, p.description)
         # st.write(p)
