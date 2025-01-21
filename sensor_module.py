@@ -71,6 +71,12 @@ class SensorModule:
             return self.data_queue.get()
         return None
 
+    def get_data(self):
+        result_list = []
+        while not self.data_queue.empty():
+            result_list.append(self.data_queue.get())
+        return result_list
+
     def get_fname(self):
         return self.fname
 

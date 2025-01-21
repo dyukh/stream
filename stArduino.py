@@ -137,11 +137,15 @@ with st.sidebar.expander("Образец", expanded=True):
 
 
 if st.button("Получить последние данные"):
-    latest_data = sensor.get_latest_data()
+    latest_data = sensor.get_data()
     if latest_data:
-        st.write(f"Последние данные: {latest_data}")
+        st.write("Последние данные")
+        st.write(latest_data)
     else:
         st.write("Нет новых данных.")
+
+
+st.divider()
 
 data = importData("1.txt")
 
