@@ -1,6 +1,7 @@
 import serial
 import threading
 import time
+import datetime
 import queue
 import logging
 
@@ -52,7 +53,8 @@ class SensorModule:
     def filter_data(self, data):
         # Реализуйте фильтрацию данных
         if data is not None:
-            strt = time.strftime("%c", time.localtime())
+            # strt = time.strftime("%c", time.localtime())
+            strt = datetime.datetime.now()
             ret_data = [strt, int(data)]
             return ret_data
         return None

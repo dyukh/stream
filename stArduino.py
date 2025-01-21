@@ -3,6 +3,7 @@ import pandas as pd
 # import numpy as np
 # import matplotlib.pyplot as plt
 import altair as alt
+import plotly.express as px
 import datetime
 import serial
 import serial.tools.list_ports
@@ -23,6 +24,8 @@ if "port" not in st.session_state:
 #     st.session_state["record_delay"] = 1
 if "sensor" not in st.session_state:
     st.session_state["sensor"] = SensorModule()
+if "datalist" not in st.session_state:
+    st.session_state["datalist"] = []
 
 sensor = st.session_state["sensor"]
 
@@ -136,16 +139,20 @@ with st.sidebar.expander("Образец", expanded=True):
     L = st.number_input("Длина", value=L)
 
 
-if st.button("Получить последние данные"):
+if st.button("Обновить данные"):
     latest_data = sensor.get_data()
     if latest_data:
-        st.write("Последние данные")
-        st.write(latest_data)
-    else:
-        st.write("Нет новых данных.")
-
+        st.session_state["datalist"].extend(latest_data)
+        df = pd.DataFrame(st.session_state["datalist"], columns = ['Время', 'Показания'])
+    plot = px.scatter(df, x='Время', y='Показания')
+    st.plotly_chart(plot)
+    col1, col2 = st.columns(2)
+    col1.dataframe(df)
+    col2.write(df.describe())
 
 st.divider()
+
+
 
 data = importData("1.txt")
 
