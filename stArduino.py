@@ -42,7 +42,7 @@ def my_to_datetime(col):
     print(col)
     return pd.to_datetime(col, format="%d.%m.%Y %S,%f")
 
-
+@st.cache_data
 def importData(fname):
     data1 = pd.read_csv(
         fname,
