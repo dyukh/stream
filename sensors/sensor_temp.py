@@ -1,9 +1,10 @@
-from sensors.base_sensor import BaseSensor
+from sensors.base_sensor import Sensor
 
-class Sensor_Temp(BaseSensor):
+class Sensor_Temp(Sensor):
     def __init__(self, port):
         super().__init__(port, name="Sensor_Temp", description="Temperature Sensor", columns='Temp')
 
     def decode_data(self, raw_data):
-        # Декодирование данных
-        return (int(raw_data[0]))
+        # Декодироsвание данных
+        print(raw_data)
+        return (int(raw_data))

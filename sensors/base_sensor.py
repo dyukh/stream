@@ -2,7 +2,7 @@ import serial
 import logging
 
 class Sensor:
-    def __init__(self, port, baudrate=9600, timeout=1, name='Sensor1', description = 'Abstract sensor', columns = 'Data1'):
+    def __init__(self, port, baudrate=9600, timeout=10, name='Sensor1', description = 'Abstract sensor', columns = 'Data1'):
         self.port = port
         self.baudrate = baudrate
         self.timeout = timeout
