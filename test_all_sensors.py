@@ -1,5 +1,6 @@
 from sensors import load_sensors
 
+
 def main():
     # Загружаем все доступные сенсоры
     sensors_classes = load_sensors()
@@ -16,6 +17,7 @@ def main():
         data = sensor.read_data()
         print(f"{sensor.name}: {data}")
         sensor.close()
+
 
 if __name__ == "__main__":
     main()

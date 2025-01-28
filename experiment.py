@@ -15,7 +15,7 @@ class Experiment:
         self.fname = None
         self.file = None
 
-    def add_sensor(self,sensor):
+    def add_sensor(self, sensor):
         self.sensors.append(sensor)
 
     def start_recording(self):
@@ -55,7 +55,7 @@ class Experiment:
         print(data)
         if data is not None:
             self.data_queue.put(data)
-            print(strt+',', ", ".join(map(str, data)), file=self.file)
+            print(strt + ",", ", ".join(map(str, data)), file=self.file)
             self.file.flush()
 
     def get_time_sleep(self):

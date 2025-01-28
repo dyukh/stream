@@ -10,6 +10,7 @@ import logging
 import os
 import serial
 import serial.tools.list_ports
+
 # from sensor_module import SensorModule  # модуль работы с датчиком
 from experiment import Experiment  # модуль работы с датчиком
 
@@ -42,7 +43,9 @@ def setup_logger():
     logger.setLevel(logging.DEBUG)
 
     # Форматтер
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
 
     # Обработчик для записи в файл
     if not os.path.exists("logs"):
@@ -59,6 +62,7 @@ logger = setup_logger()
 
 # Логирование
 logger.info("Запуск приложения Streamlit")
+
 
 def toTime(col):
     m, d = col.split(",")
@@ -203,11 +207,7 @@ with st.expander("Данные в таблице", expanded=False):
         showdata = data[col_vis].iloc[::-1]
     else:
         showdata = data[col_vis]
-    st.dataframe(data=showdata,
-                 use_container_width=True,
-                 height=300,
-                 hide_index=True
-                 )
+    st.dataframe(data=showdata, use_container_width=True, height=300, hide_index=True)
 
 with st.expander("Графики", expanded=True):
     cWeight = (
