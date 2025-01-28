@@ -6,9 +6,13 @@ import pandas as pd
 import altair as alt
 import plotly.express as px
 import datetime
+import logging
+import os
 import serial
 import serial.tools.list_ports
-from sensor_module import SensorModule  # модуль работы с датчиком
+# from sensor_module import SensorModule  # модуль работы с датчиком
+from experiment import Experiment  # модуль работы с датчиком
+
 
 columns = "Date,Time,Расход,Давление,R1,R2,R3,R4,U5,Температура".split(",")
 col_vis = "DateTime,Расход,Давление,Вес,R1,R2,R3,R4,U5,Температура".split(",")
@@ -23,13 +27,38 @@ if "port" not in st.session_state:
     st.session_state["port"] = "COM1"
 # if "record_delay" not in st.session_state:
 #     st.session_state["record_delay"] = 1
-if "sensor" not in st.session_state:
-    st.session_state["sensor"] = SensorModule()
+if "experiment" not in st.session_state:
+    st.session_state["experiment"] = Experiment()
 if "datalist" not in st.session_state:
     st.session_state["datalist"] = []
 
-sensor = st.session_state["sensor"]
+experiment = st.session_state["experiment"]
 
+
+# Инициализация логгера с кэшированием
+@st.cache_resource
+def setup_logger():
+    logger = logging.getLogger("stream_app")
+    logger.setLevel(logging.DEBUG)
+
+    # Форматтер
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # Обработчик для записи в файл
+    if not os.path.exists("logs"):
+        os.makedirs("logs")
+    file_handler = logging.FileHandler("logs/stream_app.log")
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    return logger
+
+
+# Получаем логгер
+logger = setup_logger()
+
+# Логирование
+logger.info("Запуск приложения Streamlit")
 
 def toTime(col):
     m, d = col.split(",")
@@ -114,17 +143,17 @@ def runing_callback():
     st.sidebar.write(st.session_state["is_running"])
     if st.session_state["is_running"]:
         # start recording
-        sensor.configure_port(ard_port, 9600)
-        sensor.start_recording()
+        experiment.sensors[0].configure_port(ard_port, 9600)
+        experiment.start_recording()
         st.sidebar.success("Запись начата!")
     else:
         # stop recording
-        sensor.stop_recording()
+        experiment.stop_recording()
         st.sidebar.success("Запись остановлена!")
 
 
 def delay_callback():
-    st.session_state["sensor"].set_time_sleep(st.session_state["record_delay"])
+    st.session_state["experiment"].set_time_sleep(st.session_state["record_delay"])
 
 
 if ard_port:
@@ -134,7 +163,7 @@ if ard_port:
         on_change=runing_callback,
     )
 
-st.sidebar.success(f"файл: {sensor.get_fname()}")
+st.sidebar.success(f"файл: {experiment.get_fname()}")
 
 record_delay = st.sidebar.number_input(
     "Задержка между измерениями, с",
@@ -152,7 +181,7 @@ with st.sidebar.expander("Образец", expanded=True):
 
 
 if st.button("Обновить данные"):
-    latest_data = sensor.get_data()
+    latest_data = experiment.get_data()
     if latest_data:
         st.session_state["datalist"].extend(latest_data)
     df = pd.DataFrame(
@@ -166,9 +195,7 @@ if st.button("Обновить данные"):
 
 st.divider()
 
-
 data = importData("1.txt")
-
 
 with st.expander("Данные в таблице", expanded=False):
     rev = st.toggle("Последние сверху", value=True)
