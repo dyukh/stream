@@ -5,6 +5,6 @@ class Sensor_Temp(Sensor):
         super().__init__(port, name="Sensor_Temp", description="Temperature Sensor", columns='Temp')
 
     def decode_data(self, raw_data):
-        # Декодироsвание данных
+        # Декодирование данных
         print(raw_data)
         return (int(raw_data))

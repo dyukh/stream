@@ -12,8 +12,10 @@ def main():
 
     # Чтение данных с сенсоров
     for sensor in sensors:
+        sensor.open()
         data = sensor.read_data()
         print(f"{sensor.name}: {data}")
+        sensor.close()
 
 if __name__ == "__main__":
     main()

@@ -9,17 +9,29 @@ class Sensor:
         self.name = name
         self.description = description
         self.columns = columns
+        self.serial = None
+
+
+    def open(self):
+        try:
+            self.serial = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
+            print(f"Порт {self.port} открыт.")
+        except serial.SerialException as e:
+            print(f"Ошибка при открытии порта {self.port}: {e}")
+
+
+    def close(self):
+        if self.serial and self.serial.is_open:
+            self.serial.close()
+            print(f"Порт {self.port} закрыт.")
+
 
     def read_data(self):
-        try:
-            # Открываем порт
-            with serial.Serial(self.port, self.baudrate, timeout=self.timeout) as ser:
-                # Читаем данные
-                raw_data = ser.readline().strip()
-                return self.decode_data(raw_data)
-        except serial.SerialException as e:
-            print(f"Ошибка при работе с портом {self.port}: {e}")
-            return None
+        if self.serial and self.serial.is_open:
+            raw_data = self.serial.readline().strip()
+            return self.decode_data(raw_data)
+        return None
+
 
     def decode_data(self, raw_data):
         # Пример декодирования данных
