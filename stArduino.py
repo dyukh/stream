@@ -11,7 +11,7 @@ import os
 import serial
 import serial.tools.list_ports
 
-# from sensor_module import SensorModule  # модуль работы с датчиком
+from sensors import load_sensors
 from experiment import Experiment  # модуль работы с датчиком
 
 
@@ -28,11 +28,10 @@ if "port" not in st.session_state:
     st.session_state["port"] = "COM1"
 # if "record_delay" not in st.session_state:
 #     st.session_state["record_delay"] = 1
-if "experiment" not in st.session_state:
-    st.session_state["experiment"] = Experiment()
 if "datalist" not in st.session_state:
     st.session_state["datalist"] = []
-
+if "experiment" not in st.session_state:
+    st.session_state["experiment"] = Experiment()
 experiment = st.session_state["experiment"]
 
 
@@ -117,6 +116,12 @@ def get_COM_list():
 
     # st.write(k, kindex)
     return clist, dlist, kindex
+
+
+# Загружаем все доступные сенсоры
+sensors_classes = load_sensors()
+for sensor_name, sensor_class in sensors_classes.items():
+    st.write(sensor_name)
 
 
 st.title("Эксперимент")

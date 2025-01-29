@@ -5,9 +5,9 @@ class Sensor_Temp(Sensor):
     def __init__(self, port):
         super().__init__(
             port=port,
-            name="Sensor_Temp",
-            description="Термометр",
-            columns="Температура"
+            name="Sensor_Resis",
+            description="Резистивиметр",
+            columns="dU"
         )
 
     def decode_data(self, raw_data):
