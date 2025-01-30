@@ -7,7 +7,19 @@ import logging
 
 
 class SensorModule:
+    """Класс для работы с сенсорным модулем.
+
+    Attributes:
+        serial_port (serial.Serial): Последовательный порт для подключения к сенсору.
+        time_sleep (int): Время задержки между чтением данных (по умолчанию 1 секунда).
+        is_recording (bool): Флаг, указывающий, идет ли запись данных.
+        data_queue (queue.Queue): Очередь для хранения данных.
+        thread (threading.Thread): Поток для чтения данных.
+        fname (str): Имя файла для сохранения данных.
+        file (file): Файловый объект для записи данных.
+    """
     def __init__(self):
+        """Инициализирует объект SensorModule с настройками по умолчанию."""
         self.serial_port = None
         self.time_sleep = 1
         self.is_recording = False
@@ -17,9 +29,19 @@ class SensorModule:
         self.file = None
 
     def configure_port(self, port, baudrate):
+        """Настраивает последовательный порт для подключения к сенсору.
+
+        Args:
+            port (str): Имя порта (например, 'COM3' или '/dev/ttyUSB0').
+            baudrate (int): Скорость передачи данных (например, 9600).
+        """
         self.serial_port = serial.Serial(port, baudrate)
 
     def start_recording(self):
+        """Начинает запись данных с сенсора.
+
+        Если запись еще не начата, создается поток для чтения данных и файл для сохранения.
+        """
         if not self.is_recording:
             self.is_recording = True
             self.thread = threading.Thread(target=self.read_data)
@@ -28,6 +50,10 @@ class SensorModule:
                 self.mk_def_fname()
 
     def stop_recording(self):
+        """Останавливает запись данных с сенсора.
+
+        Ожидает завершения потока чтения данных и закрывает файл.
+        """
         self.is_recording = False
         if self.thread:
             self.thread.join()
