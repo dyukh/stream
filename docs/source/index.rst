@@ -6,10 +6,16 @@
 Stream documentation
 ====================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+Программный комплекс ``Stream`` предназначен для
+настройки, визуализации и записи результатов изменений во время эксперимента.
 
+``Экспериментальная установка`` содержит один или более ``сенсоров`` --- датчиков,
+подключенных к COM-портам. Эти сенсоры периодически опрашиваются, данные сохраняются
+и визуализируются.
+
+Создано на языке Python с использованием библиотеки `Streamlit`_.
+
+.. _Streamlit: https://streamlit.io/
 
 .. toctree::
    :maxdepth: 3
