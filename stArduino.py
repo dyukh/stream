@@ -118,18 +118,20 @@ def get_COM_list():
     return clist, dlist, kindex
 
 
-# Загружаем все доступные сенсоры
-sensors_classes = load_sensors()
-for sensor_name, sensor_class in sensors_classes.items():
-    st.write(sensor_name)
-
-
 st.title("Эксперимент")
 
 # st.divider()
 
+# Загружаем все доступные сенсоры
+sensors_classes = load_sensors()
 
 # Настройка боковой панели
+st.sidebar.title("Экспериментальная установка")
+with st.sidebar.expander("Сенсоры", expanded=True):
+    for sensor_name, sensor_class in sensors_classes.items():
+        st.write(sensor_name)
+
+
 st.sidebar.title("Параметры")
 
 clist, dlist, ckey = get_COM_list()
