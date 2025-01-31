@@ -12,7 +12,7 @@ class Sensor_Temp(Sensor):
         super().__init__(
             port=port, name="Sensor_Press",
             description="Расход-Давление",
-            columns="Date,Time,Расход,Давление,R1,R2,R3,R4,U5,Температура"
+            columns="Давление"
         )
 
     def decode_data(self, raw_data):
