@@ -7,12 +7,12 @@ class Sensor_Temp(Sensor):
             port=port,
             name="Sensor_Temp",
             description="Термометр",
-            columns="Температура"
+            columns="Температура",
         )
 
     def decode_data(self, raw_data):
-        """ Декодирование данных: термометр.
-        
+        """Декодирование данных: термометр.
+
         В этом модуле ожидаем действительное число, значение температуры.
         """
         print(raw_data)

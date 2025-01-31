@@ -18,6 +18,7 @@ class SensorModule:
         fname (str): Имя файла для сохранения данных.
         file (file): Файловый объект для записи данных.
     """
+
     def __init__(self):
         """Инициализирует объект SensorModule с настройками по умолчанию."""
         self.serial_port = None

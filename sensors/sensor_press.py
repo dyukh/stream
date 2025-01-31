@@ -10,14 +10,15 @@ template = "{:d}.{:d}.{:d} {:d},{:d} 0 {:g} 1 2 3 4 5 -127.00"
 class Sensor_Temp(Sensor):
     def __init__(self, port):
         super().__init__(
-            port=port, name="Sensor_Press",
+            port=port,
+            name="Sensor_Press",
             description="Расход-Давление",
-            columns="Давление"
+            columns="Давление",
         )
 
     def decode_data(self, raw_data):
-        """ Декодирование данных: давление.
-        
+        """Декодирование данных: давление.
+
         В этом модуле ожидаем много разного, но используем давление (действительное число).
         Пример данных:
                 14.11.2024 4163,84 0 **2865.63** 1 2 3 4 5 -127.00

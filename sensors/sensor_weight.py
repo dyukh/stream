@@ -12,11 +12,11 @@ class Sensor_Temp(Sensor):
         )
 
     def decode_data(self, raw_data):
-        """ Декодирование данных: весы.
-        
+        """Декодирование данных: весы.
+
         В этом модуле ожидаем действительное число и символ g.
         Пример данных:
-                6.045 g 
+                6.045 g
         """
         print(raw_data)
         result = parse(template, raw_data)
