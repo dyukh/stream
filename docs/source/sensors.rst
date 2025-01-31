@@ -12,6 +12,14 @@ sensors.base\_sensor module
    :undoc-members:
    :show-inheritance:
 
+sensors.sensor\_press module
+----------------------------
+
+.. automodule:: sensors.sensor_press
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sensors.sensor\_resist module
 -----------------------------
 
