@@ -11,6 +11,9 @@ class Sensor_Temp(Sensor):
         )
 
     def decode_data(self, raw_data):
-        # Декодирование данных
+        """ Декодирование данных: термометр.
+        
+        В этом модуле ожидаем действительное число, значение температуры.
+        """
         print(raw_data)
-        return int(raw_data)
+        return float(raw_data)
