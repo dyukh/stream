@@ -3,7 +3,6 @@ import pandas as pd
 
 # import numpy as np
 # import matplotlib.pyplot as plt
-import altair as alt
 import plotly.express as px
 import datetime
 import logging
@@ -61,40 +60,6 @@ logger = setup_logger()
 
 # Логирование
 logger.info("Запуск приложения Streamlit")
-
-
-def toTime(col):
-    m, d = col.split(",")
-    t = int(m) + int(d) / 100
-    dt = datetime.timedelta(seconds=t)
-    # print (dt)
-    return dt
-
-
-def my_to_datetime(col):
-    print(col)
-    return pd.to_datetime(col, format="%d.%m.%Y %S,%f")
-
-
-@st.cache_data
-def importData(fname):
-    data1 = pd.read_csv(
-        fname,
-        sep=r"\s+",
-        names=columns,
-        converters={"Time": toTime},
-        # parse_dates=[['Date','Time']],
-        # date_parser = my_to_datetime,
-        parse_dates=["Date"],
-        dayfirst=True,
-        skiprows=lambda x: x % 2,
-    )
-    data2 = pd.read_csv(
-        fname, sep=r"\s+", names=["Вес", "g"], skiprows=lambda x: not x % 2
-    )
-    data = pd.concat([data1, data2], axis=1)
-    data["DateTime"] = data["Date"] + data["Time"]
-    return data
 
 
 def get_COM_list():
@@ -203,50 +168,3 @@ if st.button("Обновить данные"):
     col1, col2 = st.columns(2)
     col1.dataframe(df)
     col2.write(df.describe())
-
-st.divider()
-
-data = importData("1.txt")
-
-with st.expander("Данные в таблице", expanded=False):
-    rev = st.toggle("Последние сверху", value=True)
-    if rev:
-        showdata = data[col_vis].iloc[::-1]
-    else:
-        showdata = data[col_vis]
-    st.dataframe(data=showdata, use_container_width=True, height=300, hide_index=True)
-
-with st.expander("Графики", expanded=True):
-    cWeight = (
-        alt.Chart(data[col_vis])
-        .mark_circle()
-        .encode(
-            x=alt.X(
-                "DateTime",
-                title="Время",
-            ),
-            y=alt.Y(
-                "Вес",
-                title="Вес, г",
-            ),
-        )
-        .interactive()
-    )
-    st.altair_chart(cWeight, use_container_width=True)
-
-    cPres = (
-        alt.Chart(data[col_vis])
-        .mark_circle()
-        .encode(
-            x=alt.X(
-                "DateTime",
-                title="Время",
-            ),
-            y=alt.Y(
-                "Давление",
-                title="Давление, гектоПаскали",
-            ),
-        )
-        .interactive()
-    )
-    st.altair_chart(cPres, use_container_width=True)

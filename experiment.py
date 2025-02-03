@@ -42,6 +42,19 @@ class Experiment:
         self.sensors.append(sensor)
         logging.info(f"Sensor added: {sensor}")
 
+    def remove_sensor(self, sensor):
+        """Удаляет *первое вхождение* sensor в список датчиков экспериментальной установки.
+
+        Args:
+            sensor (SensorModule): объект SensorModule.
+        """
+        try:
+            self.sensors.remove(sensor)
+            logging.info(f"Sensor deleted: {sensor}")
+        except ValueError:
+            logging.error(f"Попытка удаления несуществующего сенсора: {sensor}")
+        
+
     def start_recording(self):
         """Начинает запись данных со всех сенсоров экспериментальной установки.
 
