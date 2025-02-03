@@ -12,7 +12,7 @@
 
 .. toctree::
    :maxdepth: 4
-   :caption: Содержание:
+   :caption: Содержание
 
    intro
    chap1

@@ -31,12 +31,13 @@ if "datalist" not in st.session_state:
     st.session_state["datalist"] = []
 if "experiment" not in st.session_state:
     st.session_state["experiment"] = Experiment()
+
 experiment = st.session_state["experiment"]
+"""Experiment: main variable with Experiment (list of sensors and functions)"""
 
-
-# Инициализация логгера с кэшированием
 @st.cache_resource
 def setup_logger():
+    """Инициализация логгера с кэшированием"""
     logger = logging.getLogger("stream_app")
     logger.setLevel(logging.DEBUG)
 
@@ -63,6 +64,15 @@ logger.info("Запуск приложения Streamlit")
 
 
 def get_COM_list():
+    """Получение доступных COM-портов
+    
+    Returns:
+        tuple: (clist, dlist, kindex)
+
+        clist: список COM-портов.
+        dlist: список описаний COM-портов.
+        kindex: индекс первого USB-to-serial порта (или 0)
+    """
     clist = []
     dlist = []
     plist = serial.tools.list_ports.comports(include_links=False)
@@ -116,6 +126,7 @@ with st.sidebar.expander("Порты", expanded=True):
 
 
 def runing_callback():
+    """Запуск или останов, реакция на кнопку"""
     st.sidebar.write(st.session_state["is_running"])
     if st.session_state["is_running"]:
         # start recording
@@ -129,6 +140,7 @@ def runing_callback():
 
 
 def delay_callback():
+    """Применяет изменения времени задержки междуи змерениями"""
     st.session_state["experiment"].set_time_sleep(st.session_state["record_delay"])
 
 
