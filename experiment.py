@@ -3,7 +3,7 @@ import time
 import datetime
 import queue
 import logging
-from sensor_module import SensorModule
+# from sensor_module import SensorModule
 
 # Настройка логирования
 # logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
