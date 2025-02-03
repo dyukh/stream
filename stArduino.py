@@ -69,9 +69,11 @@ def get_COM_list():
     Returns:
         tuple: (clist, dlist, kindex)
 
-        clist: список COM-портов.
-        dlist: список описаний COM-портов.
-        kindex: индекс первого USB-to-serial порта (или 0)
+            clist: список COM-портов.
+
+            dlist: список описаний COM-портов.
+
+            kindex: индекс первого USB-to-serial порта (или 0)
     """
     clist = []
     dlist = []
@@ -99,13 +101,17 @@ st.title("Эксперимент")
 
 # Загружаем все доступные сенсоры
 sensors_classes = load_sensors()
+sensor_names = [sensor_name for sensor_name, sensor_class in sensors_classes.items()]
 
 # Настройка боковой панели
 st.sidebar.title("Экспериментальная установка")
 with st.sidebar.expander("Сенсоры", expanded=True):
-    for sensor_name, sensor_class in sensors_classes.items():
-        st.write(sensor_name)
+    # for sensor_name, sensor_class in sensors_classes.items():
+        # st.write(sensor_name)
+    for sensor in experiment.sensors:
+        st.write(sensor.name, sensor.port, sensor.description)
 
+    st.write(sensor_names)
 
 st.sidebar.title("Параметры")
 
