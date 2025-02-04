@@ -7,3 +7,5 @@ stream
    experiment
    sensors
    stArduino
+   serialwriter
+   serialreader
