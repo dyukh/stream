@@ -103,40 +103,46 @@ st.title("Эксперимент")
 sensors_classes = load_sensors()
 sensor_names = [sensor_name for sensor_name, sensor_class in sensors_classes.items()]
 
-# Настройка боковой панели
-st.sidebar.title("Экспериментальная установка")
-with st.sidebar.expander("Сенсоры", expanded=True):
-    # for sensor_name, sensor_class in sensors_classes.items():
-        # st.write(sensor_name)
-    for sensor in experiment.sensors:
-        st.write(sensor.name, sensor.port, sensor.description)
-
-    st.write(sensor_names)
-
-st.sidebar.title("Параметры")
-
 clist, dlist, ckey = get_COM_list()
 
-with st.sidebar.expander("Порты", expanded=True):
-    ard_port = st.radio(
-        "Порт Arduino",
-        options=clist,
-        captions=dlist,
-        index=ckey,
-    )
-    w_port = st.selectbox(
-        "Весы",
-        options=dlist,
-        index=ckey,
-    )
+# Настройка боковой панели
+st.sidebar.title("Экспериментальная установка")
+with st.sidebar.expander("Добавить сенсор", expanded=True):
+    # for sensor_name, sensor_class in sensors_classes.items():
+        # st.write(sensor_name)
 
+    with st.form("add_new_sensor"):
+        newport = st.selectbox(
+            "Порт",
+            options=clist,
+            index=ckey,
+            label_visibility='collapsed',
+        )
+        newtype = st.selectbox(
+            "Сенсор",
+            options=sensor_names,
+            label_visibility='collapsed',
+        )
+        newtitle = st.text_input("Заголовок", "")
+        addnew = st.form_submit_button('Добавить')
+
+    if addnew:
+        newsensor = sensors_classes[newtype](port=newport)
+        experiment.add_sensor(newsensor)
+
+with st.sidebar.expander("Сенсоры", expanded=True):
+    for sensor in experiment.sensors:
+        st.markdown("**" + sensor.port +":** " + sensor.description)
+
+
+st.sidebar.title("Параметры")
 
 def runing_callback():
     """Запуск или останов, реакция на кнопку"""
     st.sidebar.write(st.session_state["is_running"])
     if st.session_state["is_running"]:
         # start recording
-        experiment.sensors[0].configure_port(ard_port, 9600)
+        # experiment.sensors[0].configure_port(ard_port, 9600)
         experiment.start_recording()
         st.sidebar.success("Запись начата!")
     else:
@@ -150,12 +156,11 @@ def delay_callback():
     st.session_state["experiment"].set_time_sleep(st.session_state["record_delay"])
 
 
-if ard_port:
-    run = st.sidebar.toggle(
-        ":red-background[**Запись**]",
-        key="is_running",
-        on_change=runing_callback,
-    )
+run = st.sidebar.toggle(
+    ":red-background[**Запись**]",
+    key="is_running",
+    on_change=runing_callback,
+)
 
 st.sidebar.success(f"файл: {experiment.get_fname()}")
 
@@ -169,9 +174,9 @@ record_delay = st.sidebar.number_input(
     on_change=delay_callback,
 )
 
-with st.sidebar.expander("Образец", expanded=True):
-    D = st.number_input("Диаметр", value=D)
-    L = st.number_input("Длина", value=L)
+# with st.sidebar.expander("Образец", expanded=True):
+#     D = st.number_input("Диаметр", value=D)
+#     L = st.number_input("Длина", value=L)
 
 
 if st.button("Обновить данные"):
