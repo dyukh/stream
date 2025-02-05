@@ -3,13 +3,14 @@
 
 Для целей тестирования. Можно использовать совместно с ``serialwriter.py``.
 """
+
 import serial
 import time
-import random
 
 
-port = 'COM5'
+port = "COM5"
 baudrate = 9600
+
 
 def main():
     with serial.Serial(port, baudrate, timeout=1) as ser:

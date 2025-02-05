@@ -4,7 +4,6 @@ import pandas as pd
 # import numpy as np
 # import matplotlib.pyplot as plt
 import plotly.express as px
-import datetime
 import logging
 import os
 import serial
@@ -34,6 +33,7 @@ if "experiment" not in st.session_state:
 
 experiment = st.session_state["experiment"]
 """Experiment: main variable with Experiment (list of sensors and functions)"""
+
 
 @st.cache_resource
 def setup_logger():
@@ -65,7 +65,7 @@ logger.info("Запуск приложения Streamlit")
 
 def get_COM_list():
     """Получение доступных COM-портов
-    
+
     Returns:
         tuple: (clist, dlist, kindex)
 
@@ -109,7 +109,7 @@ clist, dlist, ckey = get_COM_list()
 st.sidebar.title("Экспериментальная установка")
 with st.sidebar.expander("Добавить сенсор", expanded=True):
     # for sensor_name, sensor_class in sensors_classes.items():
-        # st.write(sensor_name)
+    #     st.write(sensor_name)
 
     with st.form("add_new_sensor"):
         newport = st.selectbox(
@@ -132,10 +132,11 @@ with st.sidebar.expander("Добавить сенсор", expanded=True):
 
 with st.sidebar.expander("Сенсоры", expanded=True):
     for sensor in experiment.sensors:
-        st.markdown("**" + sensor.port +":** " + sensor.description)
+        st.markdown("**" + sensor.port + ":** " + sensor.description)
 
 
 st.sidebar.title("Параметры")
+
 
 def runing_callback():
     """Запуск или останов, реакция на кнопку"""

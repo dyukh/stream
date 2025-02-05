@@ -53,7 +53,6 @@ class Experiment:
             logging.info(f"Sensor deleted: {sensor}")
         except ValueError:
             logging.error(f"Попытка удаления несуществующего сенсора: {sensor}")
-        
 
     def start_recording(self):
         """Начинает запись данных со всех сенсоров экспериментальной установки.

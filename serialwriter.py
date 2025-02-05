@@ -8,19 +8,21 @@
 
     Linux: socat
 """
+
 import serial
 import time
 import random
 
 
-port = 'COM6'
+port = "COM6"
 baudrate = 9600
+
 
 def main():
     with serial.Serial(port, baudrate, timeout=1) as ser:
         while True:
             # Отправляем строку
-            data = str(random.randint(0, 100)) + '\n'
+            data = str(random.randint(0, 100)) + "\n"
             ser.write(data.encode())
             print(f"Sent: {data.strip()}")
             time.sleep(1)
